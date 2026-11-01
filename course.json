@@ -1,0 +1,18 @@
+{
+  "id": "machine-learning",
+  "title": "یادگیری ماشین",
+  "description": "آموزش مبانی یادگیری ماشین با scikit-learn: رگرسیون و مجموعه‌داده‌ها.",
+  "language": "fa",
+  "dir": "rtl",
+  "level": "مقدماتی",
+  "category": "یادگیری ماشین",
+  "tags": ["یادگیری ماشین", "scikit-learn", "رگرسیون"],
+  "lectures": [
+    { "id": "regression-concepts", "title": "رگرسیون با داده‌های مصنوعی", "order": 1, "durationMinutes": 0, "objectives": [], "status": "published" },
+    { "id": "sklearn-datasets", "title": "توابع ایجاد دیتاست در scikit-learn", "order": 2, "durationMinutes": 0, "objectives": [], "status": "published" }
+  ],
+  "schemaVersion": "1.0.0",
+  "templateVersion": "1.0.0",
+  "license": "CC-BY-4.0",
+  "updatedAt": "2026-11-02"
+}
