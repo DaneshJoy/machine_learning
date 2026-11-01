@@ -36,6 +36,17 @@ test('generates the course and code indexes', async (t) => {
   }
 });
 
+test('explainer sources place the theme toggle and mobile tabs with logical properties', async (t) => {
+  for (const file of ['01_regression_concepts.html', 'sklearn_datasets.html']) {
+    const html = await readFile(path.join(root, 'contents', file), 'utf8');
+    assert.match(html, /\.theme-toggle\s*\{[^}]*inset-block-start:\s*14px[^}]*inset-inline-end:\s*16px/);
+    assert.doesNotMatch(html, /\.theme-toggle\s*\{[^}]*\btop:\s*14px/);
+    assert.doesNotMatch(html, /\.theme-toggle\s*\{[^}]*\bright:\s*16px/);
+    assert.match(html, /\.tabs-wrap\s*\{[^}]*padding-inline-end:\s*52px/);
+    assert.doesNotMatch(html, /\.tabs-wrap\s*\{[^}]*padding-right:\s*52px/);
+  }
+});
+
 test('rejects an invalid manifest', async (t) => {
   const sourceDir = await tempDirectory();
   const outputDir = await tempDirectory();

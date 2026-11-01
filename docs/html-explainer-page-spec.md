@@ -122,11 +122,11 @@ TABS      : sticky؛ هر تب یک موضوع (آیکون emoji + عنوان ف
 - `pre`: `font-family:var(--mono)`، `font-size:12.5px`، `overflow-x:auto`.
 - `.chart-box`: `position:relative; width:100%; max-width:380px; height:250px`.
 - جدول‌ها: `border-collapse:collapse`، هدر با `--navy-light`، ستون اول mono و رنگ accent.
-- ریسپانسیو: زیر ۶۴۰px به `.tabs-wrap` مقدار `padding-inline-start:52px` بده تا زیر دکمه تم بالا-چپ نرود.
+- ریسپانسیو: زیر ۶۴۰px به `.tabs-wrap` مقدار `padding-inline-end:52px` بده تا زیر دکمه تم بالا-چپ نرود.
 
 ## 8. تغییر تم (الزامی)
 
-- **دکمه گرد ۴۰×۴۰** با `position:fixed; inset-block-start:14px; inset-inline-start:16px; z-index:100`، پس‌زمینه `var(--navy-card)`، رنگ `var(--text)`، `border:1px solid var(--border)` و `box-shadow:0 2px 8px rgba(0,0,0,.15)`، **فقط آیکون SVG** (خورشید در تم روشن، ماه در تم تیره)، **بدون متن**. در hover رنگ و border به `--cyan` و `--cyan-border` تغییر کنند؛ برای دسترسی‌پذیری `aria-label="تغییر تم"` بگذار.
+- **دکمه گرد ۴۰×۴۰** با `position:fixed; inset-block-start:14px; inset-inline-end:16px; z-index:100`، پس‌زمینه `var(--navy-card)`، رنگ `var(--text)`، `border:1px solid var(--border)` و `box-shadow:0 2px 8px rgba(0,0,0,.15)`، **فقط آیکون SVG** (خورشید در تم روشن، ماه در تم تیره)، **بدون متن**. در hover رنگ و border به `--cyan` و `--cyan-border` تغییر کنند؛ برای دسترسی‌پذیری `aria-label="تغییر تم"` بگذار.
 - اسکریپت کوچک در `<head>` (قبل از رندر، برای جلوگیری از پرش رنگ):
 
 ```html
