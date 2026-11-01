@@ -8,6 +8,8 @@
 ```sh
 npm ci
 npm run check
+# پیش‌نمایش لوکال (ساخت + سرور روی http://localhost:3000):
+npm run dev
 ```
 
 نشانی سایت: https://daneshjoy.github.io/machine_learning/
