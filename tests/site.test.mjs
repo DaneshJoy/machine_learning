@@ -47,3 +47,26 @@ test('rejects an invalid manifest', async (t) => {
 
   await assert.rejects(generate({ sourceDir, outputDir }), /invalid manifest/);
 });
+
+test('pairs lessons and codes with lectures by id', async (t) => {
+  const sourceDir = await tempDirectory();
+  const outputDir = await tempDirectory();
+  t.after(() => Promise.all([rm(sourceDir, { recursive: true, force: true }), rm(outputDir, { recursive: true, force: true })]));
+  await Promise.all(['contents', 'codes'].map((name) => cp(path.join(root, name), path.join(sourceDir, name), { recursive: true })));
+  const manifest = JSON.parse(await readFile(path.join(root, 'course.json'), 'utf8'));
+
+  manifest.lectures.reverse();
+  await writeFile(path.join(sourceDir, 'course.json'), JSON.stringify(manifest));
+  await generate({ sourceDir, outputDir });
+  const index = await readFile(path.join(outputDir, 'index.html'), 'utf8');
+  const cards = index.match(/<a class="session-card"[\s\S]*?<\/a>/g) ?? [];
+  assert.equal(cards.length, 2);
+  assert.match(cards[0], /href="contents\/sklearn_datasets\.html"/);
+  assert.match(cards[0], /توابع ایجاد دیتاست در scikit-learn/);
+  assert.match(cards[1], /href="contents\/01_regression_concepts\.html"/);
+  assert.match(cards[1], /رگرسیون با داده‌های مصنوعی/);
+
+  manifest.lectures[0].id = 'renamed-lecture';
+  await writeFile(path.join(sourceDir, 'course.json'), JSON.stringify(manifest));
+  await assert.rejects(generate({ sourceDir, outputDir }), /lesson page missing for lecture renamed-lecture/);
+});
