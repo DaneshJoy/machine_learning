@@ -33,7 +33,7 @@
 ## 5. ساختار صفحه
 
 ```
-[دکمه تغییر تم  — fixed، بالا-راست، فقط آیکون]
+[دکمه تغییر تم  — fixed، بالا-چپ، فقط آیکون]
 HERO      : badge (نام کتابخانه) · عنوان H1 · یک جمله توضیح · ۲ تا ۳ آمار (عدد + برچسب)
 TABS      : sticky؛ هر تب یک موضوع (آیکون emoji + عنوان فارسی)
   تب = section-title + چند کارت (fn-card) + (اختیاری) جدول جمع‌بندی + callout «نکته‌ها»
@@ -122,11 +122,11 @@ TABS      : sticky؛ هر تب یک موضوع (آیکون emoji + عنوان ف
 - `pre`: `font-family:var(--mono)`، `font-size:12.5px`، `overflow-x:auto`.
 - `.chart-box`: `position:relative; width:100%; max-width:380px; height:250px`.
 - جدول‌ها: `border-collapse:collapse`، هدر با `--navy-light`، ستون اول mono و رنگ accent.
-- ریسپانسیو: زیر ۶۴۰px به `.tabs-wrap` مقدار `padding-right:52px` بده تا زیر دکمه تم نرود.
+- ریسپانسیو: زیر ۶۴۰px به `.tabs-wrap` مقدار `padding-inline-start:52px` بده تا زیر دکمه تم بالا-چپ نرود.
 
 ## 8. تغییر تم (الزامی)
 
-- **دکمه گرد ۴۰×۴۰** با `position:fixed; top:14px; right:16px; z-index:100`، **فقط آیکون SVG** (خورشید در تم تیره، ماه در تم روشن)، **بدون متن**. برای دسترسی‌پذیری `aria-label="تغییر تم"` بگذار.
+- **دکمه گرد ۴۰×۴۰** با `position:fixed; inset-block-start:14px; inset-inline-start:16px; z-index:100`، پس‌زمینه `var(--navy-card)`، رنگ `var(--text)`، `border:1px solid var(--border)` و `box-shadow:0 2px 8px rgba(0,0,0,.15)`، **فقط آیکون SVG** (خورشید در تم روشن، ماه در تم تیره)، **بدون متن**. در hover رنگ و border به `--cyan` و `--cyan-border` تغییر کنند؛ برای دسترسی‌پذیری `aria-label="تغییر تم"` بگذار.
 - اسکریپت کوچک در `<head>` (قبل از رندر، برای جلوگیری از پرش رنگ):
 
 ```html
@@ -141,7 +141,8 @@ document.documentElement.setAttribute('data-theme',t);})();
 - آیکون‌ها با CSS جابه‌جا شوند:
 
 ```css
-:root[data-theme="dark"] .icon-moon, :root[data-theme="light"] .icon-sun { display:none; }
+.theme-toggle svg { width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+:root[data-theme="dark"] .icon-sun, :root[data-theme="light"] .icon-moon { display:none; }
 ```
 
 ## 9. نمودارها (Chart.js)
