@@ -1,12 +1,15 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { execFile } from 'node:child_process';
 import { cp, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { promisify } from 'node:util';
 import { generate } from '../scripts/build-site.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const execFileAsync = promisify(execFile);
 
 async function tempDirectory() {
   return mkdtemp(path.join(os.tmpdir(), 'machine-learning-site-'));
@@ -27,13 +30,29 @@ test('generates the course and code indexes', async (t) => {
   assert.equal((index.match(/aria-current="page"/g) ?? []).length, 1);
 
   const code = await readFile(path.join(outputDir, 'code/index.html'), 'utf8');
-  assert.match(code, /https:\/\/github\.com\/DaneshJoy\/machine_learning\/blob\/main\/codes\/01_regression_synthetic_data\.ipynb/);
+  assert.match(code, /href="\.\.\/code\/files\/01_regression_synthetic_data\.ipynb"/);
   assert.match(code, /01_regression_synthetic_data\.ipynb/);
+  await readFile(path.join(outputDir, 'code', 'files', '01_regression_synthetic_data.ipynb'));
 
   for (const page of [index, code]) {
     const css = page.match(/<style>([\s\S]*?)<\/style>/)?.[1] ?? '';
     assert.doesNotMatch(css, /\b(left|right)\s*:/);
   }
+});
+
+test('packages site files at the ZIP root', async (t) => {
+  const outputDir = await tempDirectory();
+  const zipPath = path.join(outputDir, 'machine-learning-offline.zip');
+  t.after(() => rm(outputDir, { recursive: true, force: true }));
+  await generate({ sourceDir: root, outputDir: path.join(outputDir, 'dist') });
+  await execFileAsync('python3', [path.join(root, 'scripts', 'create-zip.py'), 'dist', zipPath], { cwd: outputDir });
+  const { stdout } = await execFileAsync('python3', ['-c', 'import sys, zipfile; print("\\n".join(zipfile.ZipFile(sys.argv[1]).namelist()))', zipPath]);
+  const entries = stdout.trim().split('\n');
+
+  assert(entries.includes('index.html'));
+  assert(entries.includes('code/index.html'));
+  assert(entries.includes('code/files/01_regression_synthetic_data.ipynb'));
+  assert(entries.every((entry) => !entry.startsWith('dist/')));
 });
 
 test('explainer sources place the theme toggle and mobile tabs with logical properties', async (t) => {
