@@ -61,6 +61,7 @@ export async function generate({ sourceDir = root, outputDir = path.join(root, '
     writeFile(path.join(outputDir, 'code', 'index.html'), page({ title: 'کدها', body: code, active: 'code', base: '../' })),
     cp(path.join(sourceDir, 'codes'), path.join(outputDir, 'code', 'files'), { recursive: true }),
     cp(path.join(sourceDir, 'contents'), path.join(outputDir, 'contents'), { recursive: true }),
+    cp(path.join(sourceDir, 'assets'), path.join(outputDir, 'assets'), { recursive: true }),
     cp(path.join(sourceDir, 'course.json'), path.join(outputDir, 'course.json')),
   ]);
   return manifest;
