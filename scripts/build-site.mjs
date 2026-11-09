@@ -49,17 +49,19 @@ export async function generate({ sourceDir = root, outputDir = path.join(root, '
   await Promise.all(Object.values(lessonPages).map(async (file) => readFile(path.join(sourceDir, 'contents', file))));
   const codes = await Promise.all(manifest.lectures.flatMap((lecture) => (lessonCodes[lecture.id] ?? []).map(async (file) => {
     await readFile(path.join(sourceDir, 'codes', file));
-    return { session: lecture.order, file, githubUrl: `https://github.com/DaneshJoy/machine_learning/blob/main/codes/${encodeURIComponent(file)}` };
+    return { session: lecture.order, file, href: `../code/files/${encodeURIComponent(file)}` };
   })));
   await rm(outputDir, { recursive: true, force: true });
   await mkdir(path.join(outputDir, 'code'), { recursive: true });
   const sessions = manifest.lectures.map((lecture) => `<li><a class="session-card" href="contents/${lessonPages[lecture.id]}"><span class="step-num">${fa(lecture.order)}</span><span>${escape(lecture.title)}</span></a></li>`).join('');
   const home = `<section class="hero"><span class="hero-badge">🎓 دورهٔ آموزشی</span><h1>${escape(manifest.title)}</h1><p>${escape(manifest.description)}</p><div class="meta-row"><span class="meta-pill">📚 تعداد جلسات: <span>${fa(manifest.lectures.length)}</span></span></div></section><section><h2 class="section-title">💬 جلسه‌ها</h2><ol class="session-list">${sessions}</ol></section>`;
-  const code = `<h1 class="page-title">کدها</h1><ul class="code-list">${codes.map((item) => `<li>جلسه ${fa(item.session)} · <a dir="ltr" rel="noopener noreferrer" target="_blank" href="${item.githubUrl}">${escape(item.file)}</a></li>`).join('')}</ul>`;
+  const code = `<h1 class="page-title">کدها</h1><ul class="code-list">${codes.map((item) => `<li>جلسه ${fa(item.session)} · <a dir="ltr" href="${item.href}">${escape(item.file)}</a></li>`).join('')}</ul>`;
   await Promise.all([
     writeFile(path.join(outputDir, 'index.html'), page({ title: manifest.title, body: home, active: 'content', base: './' })),
     writeFile(path.join(outputDir, 'code', 'index.html'), page({ title: 'کدها', body: code, active: 'code', base: '../' })),
+    cp(path.join(sourceDir, 'codes'), path.join(outputDir, 'code', 'files'), { recursive: true }),
     cp(path.join(sourceDir, 'contents'), path.join(outputDir, 'contents'), { recursive: true }),
+    cp(path.join(sourceDir, 'assets'), path.join(outputDir, 'assets'), { recursive: true }),
     cp(path.join(sourceDir, 'course.json'), path.join(outputDir, 'course.json')),
   ]);
   return manifest;

@@ -12,6 +12,8 @@ npm run check
 npm run dev
 ```
 
+Offline packaging commands require a POSIX host with `npm` and `python3`; Windows hosts need equivalent shell or CMD handling.
+
 نشانی سایت: https://daneshjoy.github.io/machine_learning/
 
 برای انتشار، در تنظیمات GitHub Pages گزینهٔ **Source: GitHub Actions** را فعال کنید.
